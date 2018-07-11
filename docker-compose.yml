@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+
+ forex-server:
+  build: ../forex
+  container_name: forex-server
+  ports:
+  - "7070:7070"
+  networks:
+  - backend
+
+ prom:
+  image: prom/prometheus
+  volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  command: '--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus'
+  ports:
+  - 9090:9090
+  depends_on:
+  - forex-server
+  networks:
+   - backend
+
+ grafana:
+   image: grafana/grafana
+   ports:
+    - 3000:3000
+   depends_on:
+    - prom
+   networks:
+    - backend
+
+networks:
+ backend:
+  driver: bridge
+
+
+
