@@ -3,7 +3,7 @@ version: '3'
 services:
 
  forex-server:
-  build: ../forex
+  build: .
   container_name: forex-server
   ports:
   - "7070:7070"
